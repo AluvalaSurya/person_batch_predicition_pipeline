@@ -1,0 +1,15 @@
+columns:
+  dname: str
+  sname: str
+  date: str
+  timestamp: str
+  minutes: int
+
+string_columns:
+  - dname
+  - sname
+  - date
+  - timestamp
+
+numeric_columns:
+  - minutes

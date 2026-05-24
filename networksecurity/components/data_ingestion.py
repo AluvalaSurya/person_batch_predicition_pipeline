@@ -40,8 +40,17 @@ class DataIngestion:
                 df = df.drop(columns=["_id"])
             
             df.replace({"na":np.nan},inplace=True)
-            return df
 
+            # Convert timestamp to datetime
+            df["timestamp"] = pd.to_datetime(df["timestamp"])
+
+            # Create minutes column
+            df["minutes"] = (
+                df["timestamp"].dt.hour * 60
+                + df["timestamp"].dt.minute
+            )
+            return df
+        
         except Exception as e:
             raise NetworkSecurityException(e,sys)
     
@@ -57,33 +66,77 @@ class DataIngestion:
             raise NetworkSecurityException(e,sys)   
 
     
-    def split_data_as_train_test(self,dataframe:pd.DataFrame):
-        try:
-            train_set,test_set = train_test_split(
-                dataframe,test_size = self.data_ingestion_config.train_test_split_ratio
-            )
-            logging.info("Performed train test split on dataframe")
+    # def split_data_as_train_test(self,dataframe:pd.DataFrame):
+    #     try:
+    #         train_set,test_set = train_test_split(
+    #             dataframe,test_size = self.data_ingestion_config.train_test_split_ratio
+    #         )
+    #         logging.info("Performed train test split on dataframe")
             
-            dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)
-            os.makedirs(dir_path,exist_ok=True)
+    #         dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)
+    #         os.makedirs(dir_path,exist_ok=True)
 
-            logging.info("Exporting train and test file path")
-            train_set.to_csv(
-                self.data_ingestion_config.training_file_path,index=False,header = True
+    #         logging.info("Exporting train and test file path")
+    #         train_set.to_csv(
+    #             self.data_ingestion_config.training_file_path,index=False,header = True
+    #         )
+    #         test_set.to_csv(
+    #             self.data_ingestion_config.testing_file_path,index=False,header = True
+    #         )
+        
+    #     except Exception as e:
+    #         raise NetworkSecurityException(e,sys) 
+
+
+    def split_data_as_train_test(self, dataframe: pd.DataFrame):
+
+        try:
+
+            train_df = pd.DataFrame()
+            test_df = pd.DataFrame()
+
+            # Sort entire dataframe
+            dataframe = dataframe.sort_values(by="timestamp")
+
+            # Split within each person
+            for dname, group in dataframe.groupby("dname"):
+                
+                train_size = int(len(group) * self.data_ingestion_config.train_test_split_ratio)
+
+                train_group = group.iloc[:train_size]
+                test_group = group.iloc[train_size:]
+
+                train_df = pd.concat([train_df, train_group])
+                test_df = pd.concat([test_df, test_group])
+
+            logging.info("Performed behavior-based train test split")
+
+            dir_path = os.path.dirname(
+                self.data_ingestion_config.training_file_path
             )
-            test_set.to_csv(
-                self.data_ingestion_config.testing_file_path,index=False,header = True
+
+            os.makedirs(dir_path, exist_ok=True)
+
+            train_df.to_csv(
+                self.data_ingestion_config.training_file_path,
+                index=False,
+                header=True
             )
 
-            logging.info("Exported train and test file path")
-            logging.info("Exited split_data_as_train_test method of Data_Ingestion class")
-
+            test_df.to_csv(
+                self.data_ingestion_config.testing_file_path,
+                index=False,
+                header=True
+            )
 
         except Exception as e:
-            raise NetworkSecurityException(e,sys)   
+            raise NetworkSecurityException(e, sys)
+        
+        logging.info("Exported train and test file path")
+        logging.info("Exited split_data_as_train_test method of Data_Ingestion class")
 
 
-
+          
     #final function
     def initiate_data_ingestion(self):
         try:
