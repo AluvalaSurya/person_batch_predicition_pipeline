@@ -3,7 +3,6 @@ columns:
   sname: str
   date: str
   timestamp: str
-  minutes: int
 
 string_columns:
   - dname
@@ -11,5 +10,3 @@ string_columns:
   - date
   - timestamp
 
-numeric_columns:
-  - minutes
