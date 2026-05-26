@@ -1,9 +1,0 @@
-[2026-05-25 23:37:21,527] 16 root - INFO - Inititate the data ingestion
-[2026-05-25 23:37:24,048] 201 root - INFO - MongoDB data exported successfully
-[2026-05-25 23:37:24,169] 217 root - INFO - Feature store file saved
-[2026-05-25 23:37:24,184] 19 root - INFO - Data Ingestion Completed
-[2026-05-25 23:37:24,214] 23 root - INFO - Inititate the data validation
-[2026-05-25 23:37:24,359] 176 root - INFO - Required columns: 4
-[2026-05-25 23:37:24,359] 177 root - INFO - Dataframe columns: 4
-[2026-05-25 23:37:24,526] 217 root - INFO - Data validation completed
-[2026-05-25 23:37:24,528] 25 root - INFO - Data Validation Completed
