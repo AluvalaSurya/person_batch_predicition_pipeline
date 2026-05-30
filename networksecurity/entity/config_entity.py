@@ -73,6 +73,13 @@ class DataTransformationConfig:
         self.tracker_mapping_file_path = os.path.join(self.mapping_dir,
             training_pipeline.TRACKER_MAPPING_FILE_NAME
         )
+
+        self.batch_prediction_file_path = os.path.join(
+            self.data_transformation_dir,
+            training_pipeline.DATA_TRANSFORMATION_BATCH_DIR,
+            training_pipeline.BATCH_PREDICTION_FILE_NAME
+        )
+        
         self.train_test_split_ratio = training_pipeline.DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
 
 

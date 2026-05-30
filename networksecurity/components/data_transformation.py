@@ -186,12 +186,12 @@ class DataTransformation:
 
             # Rolling mean
             df["rolling_mean"] = df.groupby(["dname", "sname"])["first_entry_minutes"].transform(
-                lambda x: x.rolling(5).mean()
+                lambda x: x.shift(1).rolling(5).mean()
             )
             
             # Rolling std
             df["rolling_std"] = df.groupby(["dname", "sname"])["first_entry_minutes"].transform(
-                lambda x: x.rolling(5).std()
+                lambda x: x.shift(1).rolling(5).std()
             )
             
             # Drop null rows
@@ -243,6 +243,24 @@ class DataTransformation:
             drop_cols = ["dname", "sname", "date", "timestamp"]
             train_df = train_df.drop(columns=drop_cols)
             test_df = test_df.drop(columns=drop_cols)
+            
+            # Save sample batch file
+            test_batch_df = test_df.drop(columns=[TARGET_COLUMN])
+            os.makedirs(os.path.dirname(
+                self.data_transformation_config.batch_prediction_file_path),
+                exist_ok=True
+            )
+
+            test_batch_df.to_csv(
+                self.data_transformation_config.batch_prediction_file_path,
+                index=False
+            )
+
+            logging.info(
+                f"Batch prediction file saved at: "
+                f"{self.data_transformation_config.batch_prediction_file_path}"
+            )
+
 
             # Split input and target
             input_feature_train_df = train_df.drop(columns=[TARGET_COLUMN])
