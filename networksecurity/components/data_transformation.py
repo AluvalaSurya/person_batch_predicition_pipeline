@@ -169,28 +169,29 @@ class DataTransformation:
             df["timestamp"] = pd.to_datetime(df["timestamp"])
 
             # Minutes column
-            df["first_entry_minutes"] = (df["timestamp"].dt.hour * 60+ df["timestamp"].dt.minute)
+            df["minutes"] = (df["timestamp"].dt.hour * 60+ df["timestamp"].dt.minute)
 
             # Day of week feature
             df["day_of_week"] = (df["timestamp"].dt.dayofweek)
 
             # Sort values
-            df = df.sort_values(["dname", "sname", "timestamp"])
+            df = df.sort_values(["person", "device", "timestamp"])
+            df.head()
 
             # Previous day arrival
-            df["previous_day_arrival"] = df.groupby(["dname", "sname"])["first_entry_minutes"].shift(1)
+            df["previous_day_arrival"] = df.groupby(["person", "device"])["minutes"].shift(1)
             
             # Remove extreme outliers
-            cutoff = df["first_entry_minutes"].quantile(0.95)
-            df = df[df["first_entry_minutes"] <= cutoff].reset_index(drop=True)
+            cutoff = df["minutes"].quantile(0.95)
+            df = df[df["minutes"] <= cutoff].reset_index(drop=True)
 
             # Rolling mean
-            df["rolling_mean"] = df.groupby(["dname", "sname"])["first_entry_minutes"].transform(
+            df["rolling_mean"] = df.groupby(["person", "device"])["minutes"].transform(
                 lambda x: x.shift(1).rolling(5).mean()
             )
             
             # Rolling std
-            df["rolling_std"] = df.groupby(["dname", "sname"])["first_entry_minutes"].transform(
+            df["rolling_std"] = df.groupby(["person", "device"])["minutes"].transform(
                 lambda x: x.shift(1).rolling(5).std()
             )
             
@@ -198,28 +199,28 @@ class DataTransformation:
             df = df.dropna().reset_index(drop=True)
 
             # Student mapping
-            student_map = (df[["dname"]].drop_duplicates().reset_index(drop=True))
-            student_map["student_id"] = (student_map.index)
+            person_map = (df[["person"]].drop_duplicates().reset_index(drop=True))
+            person_map["person_id"] = (person_map.index)
 
             # Tracker mapping
-            tracker_map = (df[["sname"]].drop_duplicates().reset_index(drop=True))
-            tracker_map["tracker_id"] = (tracker_map.index)
+            device_map = (df[["device"]].drop_duplicates().reset_index(drop=True))
+            device_map["device_id"] = (device_map.index)
 
             # Merge mappings
-            df = df.merge(student_map,on="dname",how="left")
-            df = df.merge(tracker_map,on="sname",how="left")
+            df = df.merge(person_map,on="person",how="left")
+            df = df.merge(device_map,on="device",how="left")
 
             # Create mapping directory
-            student_mapping_path = self.data_transformation_config.student_mapping_file_path
-            tracker_mapping_path = self.data_transformation_config.tracker_mapping_file_path
+            person_mapping_path = self.data_transformation_config.student_mapping_file_path
+            device_mapping_path = self.data_transformation_config.tracker_mapping_file_path
   
-            os.makedirs(os.path.dirname(student_mapping_path),exist_ok=True)
+            os.makedirs(os.path.dirname(person_mapping_path),exist_ok=True)
             
             # Save mapping files
-            student_map.to_csv(student_mapping_path,index=False)
-            logging.info(f"Student mapping file saved at: {student_mapping_path}")
-            tracker_map.to_csv(tracker_mapping_path,index=False)
-            logging.info(f"Student mapping file saved at: {tracker_mapping_path}")
+            person_map.to_csv(person_mapping_path,index=False)
+            logging.info(f"Student mapping file saved at: {person_mapping_path}")
+            device_map.to_csv(device_mapping_path,index=False)
+            logging.info(f"Student mapping file saved at: {device_mapping_path}")
                          
             # Convert datatype
             df["previous_day_arrival"] = (df["previous_day_arrival"].astype(int))
@@ -228,7 +229,7 @@ class DataTransformation:
             train_df = pd.DataFrame()
             test_df = pd.DataFrame()
 
-            for student_id, group in df.groupby("student_id"):
+            for person_id, group in df.groupby("person_id"):
                 group = group.sort_values("timestamp")
 
                 # train_size = int(len(group) * 0.8)
@@ -240,7 +241,7 @@ class DataTransformation:
                 test_df = pd.concat([test_df, test_group])
 
             # Drop unnecessary columns
-            drop_cols = ["dname", "sname", "date", "timestamp"]
+            drop_cols = ["person", "device", "date", "timestamp"]
             train_df = train_df.drop(columns=drop_cols)
             test_df = test_df.drop(columns=drop_cols)
             

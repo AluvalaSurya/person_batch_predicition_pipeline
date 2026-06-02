@@ -1,4 +1,4 @@
-dname,sname,date,timestamp
+person,device,date,timestamp
 E421,ET1,2025-09-02,2025-09-02 08:48:10
 E421,ET1,2025-09-03,2025-09-03 08:48:40
 E421,ET1,2025-09-04,2025-09-04 08:52:11

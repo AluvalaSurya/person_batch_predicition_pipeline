@@ -1,12 +1,12 @@
 columns:
-  dname: str
-  sname: str
+  person: str
+  device: str
   date: str
   timestamp: str
 
 string_columns:
-  - dname
-  - sname
+  - person
+  - device
   - date
   - timestamp
 

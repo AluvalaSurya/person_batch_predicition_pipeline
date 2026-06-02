@@ -1,0 +1,23 @@
+[2026-06-02 21:42:33,532] 42 root - INFO - Start data Ingestion
+[2026-06-02 21:42:40,338] 201 root - INFO - MongoDB data exported successfully
+[2026-06-02 21:42:40,620] 217 root - INFO - Feature store file saved
+[2026-06-02 21:42:40,644] 45 root - INFO - Data Ingestion completed and artifact: DataIngestionArtifact(trained_file_path='Artifacts\\06_02_2026_21_41_34\\data_ingestion\\feature_store\\check_records.csv', test_file_path='Artifacts\\06_02_2026_21_41_34\\data_ingestion\\feature_store\\check_records.csv')
+[2026-06-02 21:42:40,767] 55 root - INFO - Initiate the data Validation
+[2026-06-02 21:42:40,906] 173 root - INFO - Required columns: 4
+[2026-06-02 21:42:40,908] 174 root - INFO - Dataframe columns: 4
+[2026-06-02 21:42:41,156] 214 root - INFO - Data validation completed
+[2026-06-02 21:42:41,159] 163 root - INFO - Starting data transformation
+[2026-06-02 21:42:44,044] 221 root - INFO - Student mapping file saved at: Artifacts\06_02_2026_21_41_34\data_transformation\mapping_files\student_mapping.csv
+[2026-06-02 21:42:44,048] 223 root - INFO - Student mapping file saved at: Artifacts\06_02_2026_21_41_34\data_transformation\mapping_files\tracker_mapping.csv
+[2026-06-02 21:42:47,052] 260 root - INFO - Batch prediction file saved at: Artifacts\06_02_2026_21_41_34\data_transformation\batch_prediction\sample_batch_prediction.csv
+[2026-06-02 21:42:47,057] 152 root - INFO - Entered get_data_transformer_object method
+[2026-06-02 21:42:47,095] 51 root - INFO - Entered the save_object method of MainUtils class
+[2026-06-02 21:42:47,104] 55 root - INFO - Exited the save_object method of MainUtils class
+[2026-06-02 21:42:47,105] 51 root - INFO - Entered the save_object method of MainUtils class
+[2026-06-02 21:42:47,112] 55 root - INFO - Exited the save_object method of MainUtils class
+[2026-06-02 21:42:47,112] 300 root - INFO - Data transformation completed
+[2026-06-02 21:46:32,359] 51 root - INFO - Entered the save_object method of MainUtils class
+[2026-06-02 21:46:32,377] 55 root - INFO - Exited the save_object method of MainUtils class
+[2026-06-02 21:46:32,377] 51 root - INFO - Entered the save_object method of MainUtils class
+[2026-06-02 21:46:32,385] 55 root - INFO - Exited the save_object method of MainUtils class
+[2026-06-02 21:46:32,386] 191 root - INFO - Model trainer artifact: ModelTrainerArtifact(trained_model_file_path='Artifacts\\06_02_2026_21_41_34\\model_trainer\\trained_model\\model.pkl', train_metric_artifact=RegressionMetricArtifact(r2_score=0.6753230006039097, mean_absolute_error=11.511496646664082, root_mean_squared_error=np.float64(19.544879784790492)), test_metric_artifact=RegressionMetricArtifact(r2_score=0.7139796433685617, mean_absolute_error=10.344227999972889, root_mean_squared_error=np.float64(17.978009767419255)))

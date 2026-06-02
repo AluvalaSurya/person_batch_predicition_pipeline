@@ -6,7 +6,7 @@ import pandas as pd
 """
 Common constant variables for training pipeline
 """
-TARGET_COLUMN = "first_entry_minutes"
+TARGET_COLUMN = "minutes"
 PIPELINE_NAME = "NetworkSecurity"
 ARTIFACT_DIR = "Artifacts"
 FILE_NAME  = "check_records.csv"
@@ -74,4 +74,4 @@ MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD: float = 0.05
 DATA_TRANSFORMATION_BATCH_DIR = "batch_prediction"
 BATCH_PREDICTION_FILE_NAME = "sample_batch_prediction.csv"
 
-TRAINING_BUCKET_NAME = "netwworksecurity"
+TRAINING_BUCKET_NAME = "suryabatchprediction"
